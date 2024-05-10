@@ -54,6 +54,20 @@ const generarToken = (idUsuario) => {
 const showData = asyncHandler(async (req, res) => {
     res.status(200).json(req.user); 
 });
+
+const forgotPassword = asyncHandler(async(req, res) => {
+    const email = req.body.email
+    const user = await User.findOne({email});
+    if(!user){
+        res.status(404);
+        throw new Error('No se encontró el usuario');
+    }
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(req.body.password, salt);
+    
+    const userActualizado = await User.findByIdAndUpdate(user.id, {name: user.name, email: req.body.email, password:hashedPassword}, {new: true});
+    res.status(200).json({datos: userActualizado, message: "Se actualizaron los datos"});
+})
 const modificarUser = asyncHandler( async (req, res) => {
     const user = await User.findById(req.user.id);
     if(!user){
@@ -88,5 +102,5 @@ const showAllUsers = asyncHandler(async (req, res) => {
     res.status(200).json(users);
 })
 module.exports = {
-    register, login, showData, modificarUser, borrarUser, showAllUsers
+    register, login, showData, modificarUser, borrarUser, showAllUsers, forgotPassword
 }

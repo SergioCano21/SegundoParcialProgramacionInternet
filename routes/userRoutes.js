@@ -8,12 +8,14 @@ const {register} = require('../controllers/userController');
 const {modificarUser} = require('../controllers/userController');
 const {borrarUser} = require('../controllers/userController');
 const {showAllUsers} = require('../controllers/userController');
+const {forgotPassword} = require('../controllers/userController');
 
 router.get('/data', protect, showData);
 router.get("/", showAllUsers);
 router.post('/login', login);
 router.post('/register', register);
-router.put("/modify", protect, modificarUser)
-router.delete("/delete", protect, borrarUser)
+router.put("/modify", protect, modificarUser);
+router.put("/forgotPassword", forgotPassword);
+router.delete("/delete", protect, borrarUser);
 
 module.exports = router;
