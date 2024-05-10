@@ -24,6 +24,7 @@ const register = asyncHandler(async (req, res) => {
     })
     res.status(201).json({
         message: "Usuario registrado exitosamente",
+        error: false,
         user: user
     })
 });
@@ -35,7 +36,8 @@ const login = asyncHandler(async (req, res) => {
             _id: user.id,
             name: user.name,
             email: user.email,
-            token: generarToken(user.id)
+            token: generarToken(user.id),
+            error: false
         })
     }
     else
@@ -46,7 +48,7 @@ const login = asyncHandler(async (req, res) => {
 });
 const generarToken = (idUsuario) => {
     return jwt.sign({idUsuario}, process.env.JWT_SECRET, {
-        expiresIn: '30d'
+        expiresIn: '1h'
     });
 } 
 const showData = asyncHandler(async (req, res) => {
@@ -58,8 +60,19 @@ const modificarUser = asyncHandler( async (req, res) => {
         res.status(404);
         throw new Error('No se encontró el usuario');
     }
-    const userActualizado = await User.findByIdAndUpdate(req.user.id, req.body, {new: true});
-    res.status(200).json(userActualizado);
+    const email = req.body.email
+    const userExist = await User.findOne({email});
+
+    if(userExist && !user.equals(userExist)){
+        res.status(400);
+        throw new Error("Ya existe un usuario con ese email");
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(req.body.password, salt);
+    
+    const userActualizado = await User.findByIdAndUpdate(req.user.id, {name: req.body.name, email: req.body.email, password:hashedPassword}, {new: true});
+    res.status(200).json({datos: userActualizado, message: "Se actualizaron los datos"});
 });
 const borrarUser = asyncHandler( async (req, res) => {
     const userBorrado = await User.findById(req.user.id);
