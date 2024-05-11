@@ -48,7 +48,7 @@ const login = asyncHandler(async (req, res) => {
 });
 const generarToken = (idUsuario) => {
     return jwt.sign({idUsuario}, process.env.JWT_SECRET, {
-        expiresIn: '1h'
+        expiresIn: '2h'
     });
 } 
 const showData = asyncHandler(async (req, res) => {
@@ -94,8 +94,12 @@ const borrarUser = asyncHandler( async (req, res) => {
         res.status(404);
         throw new Error('No se encontró el usuario');
     }
-    await User.deleteOne(userBorrado);
-    res.status(200).json({message: `Se eliminó el usuario con id: ${req.user.id}`});
+    if(await bcrypt.compare(req.body.password, userBorrado.password)){
+        await User.deleteOne(userBorrado);
+        res.status(200).json({message: `La cuenta se eliminó con éxito`, error: false});
+    }
+    res.status(400);
+    throw new Error("Contraseña incorrecta");
 });
 const showAllUsers = asyncHandler(async (req, res) => {
     const users = await User.find();
