@@ -17,7 +17,8 @@ const crearServicio = asyncHandler( async (req, res) => {
             cantidad: req.body.cantidad,
             tipo: req.body.tipo,
             descripcion: req.body.descripcion,
-            user: req.user.id
+            user: req.user.id,
+            error: false
         })
         res.status(201).json(servicio);
     }else{
@@ -26,7 +27,8 @@ const crearServicio = asyncHandler( async (req, res) => {
             cantidad: req.body.cantidad,
             tipo: req.body.tipo,
             descripcion: "",
-            user: req.user.id
+            user: req.user.id,
+            error: false
         })
         res.status(201).json(servicio);
     }
