@@ -22,6 +22,15 @@ const serviceSchema = mongoose.Schema({
     descripcion: {
         type: String,
         required: false
+    },
+    precio: {
+        type: Number,
+        integer: true,
+        required: [true, "Ingrese un precio"]
+    },
+    fecha:{
+        type: Date,
+        required: [true, "Ingrese una fecha"]
     }
 })
 module.exports = mongoose.model("Service", serviceSchema)

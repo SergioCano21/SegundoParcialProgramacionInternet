@@ -7,7 +7,7 @@ const getServicio = asyncHandler( async (req, res) => {
 });
 
 const crearServicio = asyncHandler( async (req, res) => {
-    if(!req.body.tipo || !req.body.nombre || !req.body.cantidad){
+    if(!req.body.tipo || !req.body.nombre || !req.body.cantidad ||!req.body.precio ||!req.body.fecha){
         res.status(400);
         throw new Error('Faltan datos');
     }
@@ -17,6 +17,8 @@ const crearServicio = asyncHandler( async (req, res) => {
             cantidad: req.body.cantidad,
             tipo: req.body.tipo,
             descripcion: req.body.descripcion,
+            precio: req.body.precio,
+            fecha: req.body.fecha,
             user: req.user.id,
             error: false
         })
@@ -26,6 +28,8 @@ const crearServicio = asyncHandler( async (req, res) => {
             nombre : req.body.nombre,
             cantidad: req.body.cantidad,
             tipo: req.body.tipo,
+            precio: req.body.precio,
+            fecha: req.body.fecha,
             descripcion: "",
             user: req.user.id,
             error: false
