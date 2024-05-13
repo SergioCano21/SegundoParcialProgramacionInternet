@@ -60,7 +60,12 @@ jobs:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_138D1D0487C1445CBE0D6319B8B36135 }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_A7E6123906844E5BB03CAF6CC3D498FA }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_0994512A6B6346C89C496D6BBE5F7994 }}
-
+      
+      - name: Set up Node.js version for Azure deployment
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.x'
+      
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
