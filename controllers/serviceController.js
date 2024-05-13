@@ -11,31 +11,16 @@ const crearServicio = asyncHandler( async (req, res) => {
         res.status(400);
         throw new Error('Faltan datos');
     }
-    if(req.body.descripcion){
-        const servicio = await Servicio.create({
-            nombre : req.body.nombre,
-            cantidad: req.body.cantidad,
-            tipo: req.body.tipo,
-            descripcion: req.body.descripcion,
-            precio: req.body.precio,
-            fecha: req.body.fecha,
-            user: req.user.id,
-            error: false
-        })
-        res.status(201).json(servicio);
-    }else{
-        const servicio = await Servicio.create({
-            nombre : req.body.nombre,
-            cantidad: req.body.cantidad,
-            tipo: req.body.tipo,
-            precio: req.body.precio,
-            fecha: req.body.fecha,
-            descripcion: "",
-            user: req.user.id,
-            error: false
-        })
-        res.status(201).json(servicio);
-    }
+    const servicio = await Servicio.create({
+        nombre : req.body.nombre,
+        cantidad: req.body.cantidad,
+        tipo: req.body.tipo,
+        descripcion: req.body.descripcion ? req.body.descripcion : "-",
+        precio: req.body.precio,
+        fecha: req.body.fecha,
+        user: req.user.id,
+    })
+    res.status(201).json({servicio: servicio, message: "Servicio agregado"});
 });
 
 const modificarServicio = asyncHandler( async (req, res) => {

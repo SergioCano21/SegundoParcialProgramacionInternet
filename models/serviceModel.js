@@ -21,7 +21,7 @@ const serviceSchema = mongoose.Schema({
     },
     descripcion: {
         type: String,
-        required: false
+        required: true
     },
     precio: {
         type: Number,
